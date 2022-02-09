@@ -9,15 +9,19 @@ class ChainReactionEnv(gym.Env):
     BLUE = +1
     CLS = 0
     def __init__(self,size):
-        super(CustomEnv, self).__init__()
+        super(ChainReactionEnv, self).__init__()
         # Define action and observation space
         # They must be gym.spaces objects
         # Example when using discrete actions:
-          
+        RED = -1
+        BLUE = +1
+        CLS = 0
+        self.size = size
         self.colorMAT = np.zeros(size,int) #color matrix tells color of the atom
         self.MAT = np.zeros(size,int) #atoms matrix tells the number of atoms in each position
         self.maxMAT = np.zeros(size,int) #max value of each position in atoms matrix 
-        self.maxMAT = 3 # three for all
+        self.maxMAT[:,:] = 3 # three for all
+        print(self.maxMAT)
         self.maxMAT[:,0] = 2 # two at the edges
         self.maxMAT[:,size[1]-1] = 2
         self.maxMAT[0,:] = 2
@@ -28,13 +32,11 @@ class ChainReactionEnv(gym.Env):
         self.maxMAT[size[0]-1,size[1]-1] = 1
         
         self.windit = {(1,0):RED,(1,1):CLS,(0,1):BLUE}
-        
-
-
-        self.action_space = spaces.Discrete(N_DISCRETE_ACTIONS)
+        self.action_space = spaces.Box(low= -1, high=5,
+                                            shape=(2, size[0], size[1]), dtype=np.uint8)
         # Example for using image as input (channel-first; channel-last also works):
         self.observation_space = spaces.Box(low=0, high=255,
-                                            shape=(N_CHANNELS, HEIGHT, WIDTH), dtype=np.uint8)
+                                            shape=(2, size[0], size[1]), dtype=np.uint8)
 
     def add_atom(self,cord,col) :
         #cord should be list with cordinate x,y int eg: [1,2]
@@ -42,8 +44,7 @@ class ChainReactionEnv(gym.Env):
         y = cord[1]
         self.MAT[x,y] = self.MAT[x,y] + 1
         self.colorMAT[x,y] = col
-        self.check_explode(self,cord,col)
-
+        
     def check_explode(self,cord,col):     #checks if the given box will explode if so
                                         #it will explode
         x = cord[0]
@@ -58,8 +59,9 @@ class ChainReactionEnv(gym.Env):
             for e in ew:
                 if e[0] >= 0 and e[1] >= 0 and e[0] < 8 and e[1] < 8 :
                     explod = explod +[e]
+                    self.add_atom(self,e,col)
         for e in explod:
-            self.add_atom(self,e,col)
+            check_explode(self,e,col)
     
     def check_win(self):       #sees all boxes and dicides wether anyone has won
         r = 0

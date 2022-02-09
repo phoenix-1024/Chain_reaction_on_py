@@ -1,2 +1,8 @@
+# ignore the pycache folder
+__pycache__
 # ignore vscode
 .vscode
+
+# testing files
+simple_test.py
+test_case1.py
