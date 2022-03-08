@@ -15,3 +15,10 @@ todo
 
 maintainence task
 mantain a requirements.txt
+
+decisions
+
+1. how do i want my observation space -  [x,y,2]
+2. how do I want my action space  -  [x,y]
+3. do I want a randome agent
+4. how to handle 2 player enviornment
