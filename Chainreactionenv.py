@@ -27,8 +27,8 @@ class ChainReactionEnv(gym.Env):
         self.times_added = 0
         self.action_space = spaces.Tuple((spaces.Discrete(self.size[0]), spaces.Discrete(self.size[1])))
         # observation_space first chanell for agent color second for position and no. of atoms
-        self.observation_space = spaces.Box(low=-1, high=5,
-                                            shape=(2, size[0], size[1]), dtype=np.uint8)
+        self.observation_space = spaces.Box(low=-1, high=10,
+                                            shape=(2, size[0], size[1]), dtype=np.int64)
 
     def add_atom(self,cord) :
         #cord should be list with cordinate x,y int eg: [1,2]
@@ -124,7 +124,7 @@ class ChainReactionEnv(gym.Env):
         
         self.observation = np.array([self.colorMAT , self.MAT])
         done = self.check_win()
-        info = 'current color is ' + num2color[self.col]
+        info = {'current color' : num2color[self.col]}
         return self.observation, reward, done, info
 
     def reset(self):
@@ -141,11 +141,13 @@ class ChainReactionEnv(gym.Env):
         self.maxMAT[self.size[0]-1,0] = 1
         self.maxMAT[self.size[0]-1,self.size[1]-1] = 1
         self.observation = np.array([self.colorMAT , self.MAT])
+        #self.observation = np.ascontiguousarray(np.array([self.colorMAT , self.MAT]).transpose(2,1,0))
         return self.observation  # reward, done, info can't be included
     
     def render(self, mode='human'):
         #print(self.colorMAT)
-        print(self.observation)
+        print(self.observation.shape)
+
     
     def close (self):
         ...
