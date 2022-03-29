@@ -25,7 +25,7 @@ class ChainReactionEnv(gym.Env):
         # Example when using discrete actions:
         # action space coordinate (x,y)
         self.times_added = 0
-        self.action_space = spaces.Tuple((spaces.Discrete(self.size[0]), spaces.Discrete(self.size[1])))
+        self.action_space = spaces.Box(low=np.array([0,0]),high = np.array([size[0],size[1]])) #spaces.Tuple((spaces.Discrete(self.size[0]), spaces.Discrete(self.size[1])))
         # observation_space first chanell for agent color second for position and no. of atoms
         self.observation_space = spaces.Box(low=-1, high=10,
                                             shape=(2, size[0], size[1]), dtype=np.int64)
