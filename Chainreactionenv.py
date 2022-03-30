@@ -141,7 +141,7 @@ class ChainReactionEnv(gym.Env):
         self.maxMAT[self.size[0]-1,0] = 1
         self.maxMAT[self.size[0]-1,self.size[1]-1] = 1
         self.observation = np.array([self.colorMAT , self.MAT])
-        #self.observation = np.ascontiguousarray(np.array([self.colorMAT , self.MAT]).transpose(2,1,0))
+        # self.observation = np.ascontiguousarray(np.array([self.colorMAT , self.MAT]).transpose(2,1,0))
         return self.observation  # reward, done, info can't be included
     
     def render(self, mode='human'):
